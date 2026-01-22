@@ -1,4 +1,4 @@
-package Entity;
+package edu.aivle.heatguard_ai_back.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
