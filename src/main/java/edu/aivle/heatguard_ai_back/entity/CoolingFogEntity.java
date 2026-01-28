@@ -23,6 +23,9 @@ public class CoolingFogEntity {
     @Column(name = "CF_LOCATION")
     private String cf_location;
 
+    @Column(name = "CF_ADDRESS")
+    private String cf_address;
+
     @Column(name = "CF_LAT")
     private double cf_lat;
 
@@ -31,15 +34,6 @@ public class CoolingFogEntity {
 
     @Column(name = "CF_STATE")
     private boolean cf_state;
-
-    @Column(name = "CF_SELECTED_TEMP")
-    private double cf_selected_temp;
-
-    @Column(name = "CF_NEARBY_TEMP")
-    private double cf_nearby_temp;
-
-    @Column(name = "CF_HUM_PER")
-    private double cf_hum_per;
 
     @Column(name = "CF_INST_DATE")
     private String cf_inst_date;
