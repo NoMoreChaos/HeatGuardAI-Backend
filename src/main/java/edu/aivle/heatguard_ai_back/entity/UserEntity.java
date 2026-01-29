@@ -6,6 +6,8 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter @Setter @Entity(name = "USER_TB")
 public class UserEntity {
     @Id @Column(name = "USER_CD")
@@ -24,6 +26,6 @@ public class UserEntity {
     private boolean user_auth;
 
     @Column(name = "CREATE_DATE")
-    private String create_date;
+    private LocalDateTime create_date;
 
 }
