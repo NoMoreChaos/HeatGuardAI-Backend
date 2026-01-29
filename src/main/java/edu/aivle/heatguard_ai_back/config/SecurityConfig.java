@@ -29,7 +29,7 @@ public class SecurityConfig {
                 // CORS 활성화
                 .cors(cors -> {})
 
-                // 로그인 상태를 ‘세션’으로 기억X
+                // 로그인 상태를 '세션'으로 기억X
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 // 임시로 다 열어둔 상태일 경우 유지
