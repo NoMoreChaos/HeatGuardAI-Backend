@@ -1,3 +1,8 @@
+# TODO:: 삭제 (임시)
+jwt:
+  secret: "8OieD8qFft9YPJ83x2B7bQqihu5NSqanEZZA6+ZH74UrvyIgVCgbbJJo/i9bzruz/gT7VqAU+xCa+UIhFuWlyQ=="
+
+
 spring:
   application:
     name: heatguard-ai-back

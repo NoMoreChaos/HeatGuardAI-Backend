@@ -77,7 +77,6 @@ public class CoolingFogService {
             hum = m.getCf_measure_hum_per();
         }
 
-
         return new CoolingFogDetailResponse (
                 entity.getCf_city_gu(),
                 entity.getCf_city_dong(),
