@@ -1,6 +1,9 @@
 package edu.aivle.heatguard_ai_back.controller;
 
 
+import edu.aivle.heatguard_ai_back.dto.ApiResponse;
+import edu.aivle.heatguard_ai_back.service.NoticeService;
+import edu.aivle.heatguard_ai_back.dto.notice.response.NoticeListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,10 +12,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/notice")
 public class NoticeController {
 
+    private final NoticeService noticeService;
     // 게시판 리스트
     @GetMapping
-    public String getNoticeList(@RequestParam String type) {
-        return "notice type = " + type;
+    public ApiResponse<NoticeListResponse> getNoticeList(
+            @RequestParam(name="notice_type",required = false) String noticeType,
+            @RequestParam(name="limit_count",required = false) Integer limitCount
+    ){
+        NoticeListResponse data = noticeService.getNoticeList(noticeType,limitCount);
+        return ApiResponse.success(data);
     }
 
     // 게시판 상세

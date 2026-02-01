@@ -1,31 +1,47 @@
 package edu.aivle.heatguard_ai_back.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter @Entity
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "NOTICE_FILE_TB")
 public class NoticeFileEntity {
-    @Id @Column(name = "NOTICE_FILE_CD")
-    private int notice_file_cd;
 
-    @Column(name = "NOTICE_FILE_NM")
-    private String notice_file_nm;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "NOTICE_FILE_CD")
+    private Integer noticeFileCd;
 
-    @Column(name = "NOTICE_FILE_SAVE_NM")
-    private String notice_file_save_nm;
+    @Column(name = "NOTICE_FILE_NM", nullable = false)
+    private String noticeFileNm;
+
+    @Column(name = "NOTICE_CD", nullable = false)
+    private Integer noticeCd;
+
+    @Column(name = "NOTICE_FILE_SAVE_NM", nullable = false)
+    private String noticeFileSaveNm;
 
     @Column(name = "NOTICE_FILE_TYPE")
-    private String notice_file_type;
+    private String noticeFileType;
 
     @Column(name = "NOTICE_FILE_SIZE")
-    private long notice_file_size;
+    private Long noticeFileSize;
 
     @Column(name = "NOTICE_FILE_SAVE_PATH")
-    private String notice_file_save_path;
+    private String noticeFileSavePath;
 
     @Column(name = "CREATE_DATE")
-    private String create_date;
+    private LocalDateTime createDate;
+
+    @PrePersist
+    public void prePersist(){
+        if (this.createDate == null){
+            this.createDate = LocalDateTime.now();
+        }
+    }
 }
