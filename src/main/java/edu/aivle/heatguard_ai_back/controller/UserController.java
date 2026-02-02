@@ -29,7 +29,7 @@ public class UserController {
     // 회원가입 이메일 검증
     @GetMapping("/signup/emailCheck")
     public ApiResponse<Map<String, Object>> postEmailCheck(
-            @RequestParam("userId") String userId) {
+            @RequestParam(name = "user_id") String userId) {
 
         try {
             userService.checkEmailAvailable(userId);
