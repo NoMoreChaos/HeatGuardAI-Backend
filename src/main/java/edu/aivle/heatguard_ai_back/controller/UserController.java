@@ -3,7 +3,6 @@ package edu.aivle.heatguard_ai_back.controller;
 import edu.aivle.heatguard_ai_back.dto.ApiResponse;
 import edu.aivle.heatguard_ai_back.dto.user.request.SigninRequest;
 import edu.aivle.heatguard_ai_back.dto.user.request.SignupRequest;
-import edu.aivle.heatguard_ai_back.repository.UserRepository;
 import edu.aivle.heatguard_ai_back.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import java.util.Map;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserRepository userRepository;
     private final UserService userService;
 
     // 로그인
@@ -29,9 +27,16 @@ public class UserController {
     }
 
     // 회원가입 이메일 검증
-    @PostMapping("/signup/emailCheck")
-    public String postEmailCheck() {
-        return "emailCheck ok";
+    @GetMapping("/signup/emailCheck")
+    public ApiResponse<Map<String, Object>> postEmailCheck(
+            @RequestParam("userId") String userId) {
+
+        try {
+            userService.checkEmailAvailable(userId);
+            return ApiResponse.success(Map.of());
+        } catch (IllegalArgumentException e){
+            return ApiResponse.failure(e.getMessage());
+        }
     }
 
     // 회원가입

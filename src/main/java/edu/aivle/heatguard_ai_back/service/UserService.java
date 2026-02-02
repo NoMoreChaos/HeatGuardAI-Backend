@@ -31,9 +31,17 @@ public class UserService {
         );
 
         UserEntity user = userRepository.findByUserId(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("이메일이 존재하지 않습니다."));
+                .orElseThrow(() ->  new IllegalArgumentException("아이디 또는 비밀번호가 틀렸습니다."));
 
-        return buildAuthResponse(user, authentication);
+        return buildAuthResponse(user);
+    }
+
+
+    // 이메일 중복검증
+    public void checkEmailAvailable (String email) {
+        if(userRepository.existsByUserId(email)) {
+            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+        }
     }
 
     // 회원가입
@@ -56,15 +64,10 @@ public class UserService {
         // 사용자 DB저장
         userRepository.save(user);
 
-        // Security로 인증 (가입 즉시 로그인)
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, req.getUser_pw())
-        );
-
-        return buildAuthResponse(user, authentication);
+        return buildAuthResponse(user);
     }
 
-    public Map<String, Object> buildAuthResponse(UserEntity user, Authentication authentication){
+    private Map<String, Object> buildAuthResponse(UserEntity user){
         boolean isAdmin = user.isUserAuth();
         String token = jwtProvider.createAccessToken(user.getUserId(), isAdmin);
 
