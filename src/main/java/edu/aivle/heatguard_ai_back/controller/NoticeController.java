@@ -2,6 +2,7 @@ package edu.aivle.heatguard_ai_back.controller;
 
 
 import edu.aivle.heatguard_ai_back.dto.ApiResponse;
+import edu.aivle.heatguard_ai_back.dto.notice.response.NoticeDetailResponse;
 import edu.aivle.heatguard_ai_back.service.NoticeService;
 import edu.aivle.heatguard_ai_back.dto.notice.response.NoticeListResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +26,13 @@ public class NoticeController {
 
     // 게시판 상세
     @GetMapping("/{notice_cd}")
-    public String getNoticeDetail(@PathVariable String notice_cd) {
-        return notice_cd + "notice detail ok";
+    public ApiResponse<NoticeDetailResponse> getNoticeDetail(
+            @PathVariable("notice_cd") Integer noticeCd //
+    ) {
+        NoticeDetailResponse data = noticeService.getNoticeDetail(noticeCd);
+        return ApiResponse.success(data);
     }
+
 
     // 게시판 파일 다운로드
     @GetMapping("/{notice_file_cd}/download")
