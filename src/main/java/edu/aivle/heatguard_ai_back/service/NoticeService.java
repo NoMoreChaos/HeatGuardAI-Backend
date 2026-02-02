@@ -7,16 +7,20 @@
 
 package edu.aivle.heatguard_ai_back.service;
 
+import edu.aivle.heatguard_ai_back.dto.notice.request.NoticeCreateRequest;
+import edu.aivle.heatguard_ai_back.dto.notice.response.NoticeCreateResponse;
 import edu.aivle.heatguard_ai_back.dto.notice.response.NoticeDetailResponse;
 import edu.aivle.heatguard_ai_back.dto.notice.response.NoticeListResponse;
 import edu.aivle.heatguard_ai_back.entity.NoticeEntity;
 import edu.aivle.heatguard_ai_back.entity.NoticeFileEntity;
+import edu.aivle.heatguard_ai_back.repository.NoticeFileRepository;
 import edu.aivle.heatguard_ai_back.repository.NoticeRepository;
 import edu.aivle.heatguard_ai_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,6 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NoticeService {
     private final NoticeRepository noticeRepository;
+    private final NoticeFileRepository noticeFileRepository;
     private final UserRepository userRepository;
 
     /**
@@ -119,6 +124,39 @@ public class NoticeService {
                 .noticeContent(notice.getNoticeContent())
                 .noticeFile(fileDto)
                 .build();
+    }
+    /**
+     * 3.[POST] 게시판 생성
+     */
+    @Transactional
+    public NoticeCreateResponse createNotice(NoticeCreateRequest req) {
+
+        // 1) 파일 존재 확인
+        NoticeFileEntity file = noticeFileRepository.findById(req.getNoticeFileCd())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 notice_file_cd 입니다."));
+
+        // 2) 이미 다른 공지에 연결된 파일이면 막기 (선택이지만 추천)
+        if (file.getNoticeCd() != null) {
+            throw new IllegalStateException("이미 공지에 연결된 첨부파일입니다.");
+        }
+
+        // 3) Notice 저장 (PK 생성)
+        NoticeEntity notice = new NoticeEntity();
+        notice.setUserCd(req.getUserCd());
+        notice.setCfCd(req.getCfCd());
+        notice.setNoticeTitle(req.getNoticeTitle());
+        notice.setNoticeType(req.getNoticeType());
+        notice.setNoticeContent(req.getNoticeContent());
+        notice.setNoticeFixYn(req.getNoticeFixYn());
+
+        NoticeEntity saved = noticeRepository.save(notice);
+        Integer noticeCd = saved.getNoticeCd();
+
+        // 4) NoticeFileEntity에 notice_cd 업데이트
+        file.setNoticeCd(noticeCd);
+        noticeFileRepository.save(file);
+
+        return new NoticeCreateResponse(noticeCd);
     }
 
 }
