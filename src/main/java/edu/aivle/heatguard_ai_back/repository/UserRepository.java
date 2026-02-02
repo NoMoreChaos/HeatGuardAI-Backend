@@ -11,4 +11,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, String> {
     Optional<UserEntity> findByUserId(@Param("userId") String userId);
     boolean existsByUserId(@Param("userId") String userId);
+
+    // notice 작성자명 조회 시 사용
+    @Query("select u.userNm from USER_TB u where u.userCd = :userCd")
+    String findUserNmByUserCd(@Param("userCd") String userCd);
 }
