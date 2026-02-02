@@ -5,6 +5,8 @@ import edu.aivle.heatguard_ai_back.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -41,12 +43,13 @@ public class SecurityConfig {
                 // 임시로 다 열어둔 상태일 경우 유지
                 .authorizeHttpRequests(auth -> auth
                         // 브라우저가 사전 확인(Preflight) 요청을 보낼 때, 인증 없이 통과
-                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()// TODO:: 실제 서버 배포시 아래 내용은 주석해제 필요
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // 로그인/회원가입
+                        // 로그인/회원가입/이메일중복검사
                         .requestMatchers(
                                 "/api/users/signin",
-                                "/api/users/signup"
+                                "/api/users/signup",
+                                "/api/users/signup/emailCheck"
                         ).permitAll()
 
                         // Swagger
@@ -85,7 +88,7 @@ public class SecurityConfig {
                 "http://localhost:3000",
                 "http://127.0.0.1:3000",
                 "https://*.trycloudflare.com"
-                // 화면 배포 주소
+                // TODO:: 화면 배포 주소
         ));
 
         // 메서드 허용
@@ -101,5 +104,11 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
+    }
+
+    // 유효한 로그인 판단 관리자
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }
