@@ -21,5 +21,19 @@ spring:
       ddl-auto: none
     show-sql: false
 
+  #게시판 업로드 파일 max 크기 정의
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
   #jwt:
   # secret: ${JWT_SECRET_KEY} # 추후 배포 서버에 저장하고 사용
+  #게시판 업로드 파일 경로 설정
+  app:
+    notice-file:
+      upload-dir: ./uploads/notice #s3와 연결되면 무시됨(삭제 안해도 오류 안 남)
+      max-size-bytes: 10485760   # 10MB
+      allowed-ext: pdf,png,jpg,jpeg,hwp,doc,docx,xls,xlsx,ppt,pptx,txt
+
+
