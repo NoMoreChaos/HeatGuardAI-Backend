@@ -20,11 +20,11 @@ public class CustomUserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("해당 사용자가 존재하지 않습니다."));
 
         // DB 관리자 : 1 / 사용자 : 0
-        boolean isAdmin = user.isUser_auth();
+        boolean isAdmin = user.isUserAuth();
 
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUser_id()) // 이메일
-                .password(user.getUser_pw()) // bcrypt 형식 비밀번호
+                .username(user.getUserId()) // 이메일
+                .password(user.getUserPw()) // bcrypt 형식 비밀번호
                 .roles(isAdmin ? "ADMIN" : "USER")
                 .build();
     }
