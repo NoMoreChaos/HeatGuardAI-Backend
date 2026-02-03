@@ -32,5 +32,6 @@ public class NoticeDetailResponse {
         private String noticeFileNm;
         private String noticeFileType;
         private Long noticeFileSize;
+        private String noticeFileSavePath; //s3 저장경로
     }
 }

@@ -112,6 +112,7 @@ public class NoticeService {
                     .noticeFileNm(file.getNoticeFileNm())
                     .noticeFileType(file.getNoticeFileType())
                     .noticeFileSize(file.getNoticeFileSize())
+                    .noticeFileSavePath(file.getNoticeFileSavePath())
                     .build();
         }
         return NoticeDetailResponse.builder()
