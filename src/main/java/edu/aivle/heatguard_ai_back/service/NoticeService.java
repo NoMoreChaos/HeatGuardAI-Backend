@@ -132,17 +132,11 @@ public class NoticeService {
     @Transactional
     public NoticeCreateResponse createNotice(NoticeCreateRequest req) {
 
-        // 1) 파일 존재 확인
-        NoticeFileEntity file = noticeFileRepository.findById(req.getNoticeFileCd())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 notice_file_cd 입니다."));
-
-        // 2) 이미 다른 공지에 연결된 파일이면 막기 (선택이지만 추천)
-        if (file.getNoticeCd() != null) {
-            throw new IllegalStateException("이미 공지에 연결된 첨부파일입니다.");
-        }
-
-        // 3) Notice 저장 (PK 생성)
+        // 1) Notice 저장 (PK 생성)
         NoticeEntity notice = new NoticeEntity();
+        if (req.getCfCd() != null){
+            notice.setCfCd(req.getCfCd());
+        }
         notice.setUserCd(req.getUserCd());
         notice.setCfCd(req.getCfCd());
         notice.setNoticeTitle(req.getNoticeTitle());
@@ -153,12 +147,22 @@ public class NoticeService {
         NoticeEntity saved = noticeRepository.save(notice);
         Integer noticeCd = saved.getNoticeCd();
 
-        // 4) NoticeFileEntity에 notice_cd 업데이트
-        file.setNoticeCd(noticeCd);
-        noticeFileRepository.save(file);
+
+        // 2) 파일이 있는 경우에만 notice_file_cd 추가
+        Integer noticeFileCd = req.getNoticeFileCd();
+        if (noticeFileCd != null) {
+            NoticeFileEntity file = noticeFileRepository.findById(noticeFileCd)
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 notice_file_cd 입니다."));
+
+            if (file.getNoticeCd() != null) {
+                throw new IllegalStateException("이미 공지에 연결된 첨부파일입니다.");
+            }
+
+            file.setNoticeCd(noticeCd);
+            noticeFileRepository.save(file);
+        }
 
         return new NoticeCreateResponse(noticeCd);
     }
-
 }
 
