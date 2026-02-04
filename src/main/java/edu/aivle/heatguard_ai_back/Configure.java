@@ -23,6 +23,12 @@ public class Configure {
     @Value("${personal.db-pw}")
     private String DB_PASSWORD;
 
+    @Value("${personal.ssh-host}")
+    private String SSH_HOST;
+
+    @Value("${personal.db-name}")
+    private String DB_NAME;
+
     @Value("${personal.ssh-passphrase}")
     private String SSH_PASSPHRASE;
     @Bean
@@ -33,7 +39,7 @@ public class Configure {
         //jsch.addIdentity(SSH_KEY, SSH_PASSPHRASE);
         jsch.addIdentity(SSH_KEY);
         // SSH 세션 생성
-        Session session = jsch.getSession(USERNAME, "aice4db.duckdns.org", 22);
+        Session session = jsch.getSession(USERNAME, SSH_HOST, 22);
         session.setConfig("StrictHostKeyChecking", "no");
         session.connect();
 
@@ -43,7 +49,7 @@ public class Configure {
         // MariaDB DataSource 설정
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("org.mariadb.jdbc.Driver");
-        ds.setUrl("jdbc:mariadb://localhost:" + assignedPort + "/aivle4th");
+        ds.setUrl("jdbc:mariadb://localhost:" + assignedPort + "/" + DB_NAME);
         ds.setUsername(DB_USERNAME);
         ds.setPassword(DB_PASSWORD);
         return ds;
