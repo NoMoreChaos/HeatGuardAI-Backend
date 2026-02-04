@@ -2,7 +2,6 @@
 jwt:
   secret: "8OieD8qFft9YPJ83x2B7bQqihu5NSqanEZZA6+ZH74UrvyIgVCgbbJJo/i9bzruz/gT7VqAU+xCa+UIhFuWlyQ=="
 
-
 spring:
   #snake_case로 api 컬럼값 출력되도록 설정
   jackson:
@@ -12,9 +11,9 @@ spring:
     name: heatguard-ai-back
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/HGAIBACK
-    username: {USERNAME}
-    password: {PASSWORD}
+    url: jdbc:mariadb://localhost:3306/{personal.db-name}
+    username: {personal.db-id}
+    password: {personal.db-pw}
 
   jpa:
     hibernate:
@@ -36,4 +35,5 @@ spring:
       max-size-bytes: 10485760   # 10MB
       allowed-ext: pdf,png,jpg,jpeg,hwp,doc,docx,xls,xlsx,ppt,pptx,txt
 
-
+  config:
+    import: classpath:personal.yaml
