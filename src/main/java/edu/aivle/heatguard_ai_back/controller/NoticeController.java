@@ -11,7 +11,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/notice")
@@ -38,12 +40,6 @@ public class NoticeController {
     }
 
 
-    // 게시판 파일 다운로드
-    @GetMapping("/{notice_file_cd}/download")
-    public String getNoticeFileDownload(@PathVariable String notice_file_cd) {
-        return notice_file_cd + "notice file download ok";
-    }
-
     // 게시판 생성(작성)
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<NoticeCreateResponse>> createNotice(
@@ -55,13 +51,10 @@ public class NoticeController {
         } catch (IllegalArgumentException | IllegalStateException e) {
             return ResponseEntity.badRequest().body(ApiResponse.failure(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(ApiResponse.failure("공지 등록 중 오류가 발생했습니다."));
+            log.error("공지 등록 서버 오류 req={}", req, e);
+            return ResponseEntity.badRequest().body(ApiResponse.failure("공지 등록 중 오류: " + e.getMessage()));
         }
     }
-
-    // 게시판 삭제
-    @DeleteMapping("/{notice_cd}")
-    public String deleteNotice(@PathVariable String notice_cd) {
-        return notice_cd + " deleted";
-    }
 }
+
+
