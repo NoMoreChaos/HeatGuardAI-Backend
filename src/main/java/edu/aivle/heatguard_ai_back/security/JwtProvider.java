@@ -13,6 +13,7 @@ import java.security.Key;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Component
@@ -37,11 +38,16 @@ public class JwtProvider {
     // AccessToken 생성 및 00시 토큰 만료
     public String createAccessToken(String userId, boolean isAdmin) {
         Instant now = Instant.now();
+
+        Date exp = userId.equals("superadmin@test.com")
+                ? Date.from(now.plus(30, ChronoUnit.DAYS)) // 30일
+                : nextMidnightKst(); // 00시 토큰만료
+
         return Jwts.builder()
                 .setSubject(userId)
                 .claim("admin", isAdmin)
                 .setIssuedAt(Date.from(now))
-                .setExpiration(nextMidnightKst()) // 00시 만료
+                .setExpiration(exp)
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
