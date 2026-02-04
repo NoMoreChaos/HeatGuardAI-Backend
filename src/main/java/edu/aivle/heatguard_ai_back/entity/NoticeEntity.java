@@ -19,7 +19,7 @@ public class NoticeEntity {
     @Column(name = "USER_CD", nullable = false, length = 36)
     private String userCd;
 
-    @Column(name = "CF_CD", nullable = false, length = 36)
+    @Column(name = "CF_CD", nullable = true, length = 36)
     private String cfCd;
 
     @Column(name = "NOTICE_TITLE", nullable = false, length = 255)
