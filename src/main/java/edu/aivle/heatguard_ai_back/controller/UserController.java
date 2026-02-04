@@ -26,6 +26,7 @@ public class UserController {
         return ApiResponse.success(data);
     }
 
+
     // 회원가입 이메일 검증
     @GetMapping("/signup/emailCheck")
     public ApiResponse<Map<String, Object>> postEmailCheck(
