@@ -74,6 +74,7 @@ public class UserService {
         return Map.of(
                 "access_token", token,
                 "user_auth", isAdmin ? "admin" : "user",
+                "user_cd", user.getUserCd(),
                 "user_nm", user.getUserNm(),
                 "user_email", user.getUserId()
         );
