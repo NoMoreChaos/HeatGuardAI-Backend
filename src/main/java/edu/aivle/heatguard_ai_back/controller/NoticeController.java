@@ -1,6 +1,5 @@
 package edu.aivle.heatguard_ai_back.controller;
 
-
 import edu.aivle.heatguard_ai_back.dto.ApiResponse;
 import edu.aivle.heatguard_ai_back.dto.notice.request.NoticeCreateRequest;
 import edu.aivle.heatguard_ai_back.dto.notice.response.NoticeCreateResponse;
@@ -54,6 +53,13 @@ public class NoticeController {
             log.error("공지 등록 서버 오류 req={}", req, e);
             return ResponseEntity.badRequest().body(ApiResponse.failure("공지 등록 중 오류: " + e.getMessage()));
         }
+    }
+
+    //게시판 삭제
+    @DeleteMapping("/{notice_cd}")
+    public ApiResponse<Void> deleteNotice(@PathVariable("notice_cd") int noticeCd) {
+        noticeService.deleteNotice(noticeCd);
+        return ApiResponse.success(null);
     }
 }
 
