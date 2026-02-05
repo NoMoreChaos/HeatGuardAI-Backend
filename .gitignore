@@ -26,3 +26,7 @@ gradle-app.setting
 .vscode
 
 personal.yaml
+aws-secret.yaml
+
+/src/main/resources/personal.yaml
+/src/main/resources/aws-secret.yaml
