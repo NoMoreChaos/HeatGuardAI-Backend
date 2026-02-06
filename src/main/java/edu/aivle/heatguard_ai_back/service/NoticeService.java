@@ -54,7 +54,6 @@ public class NoticeService {
 
         //1-2.정렬 : 고정 + 최신순
         Sort sort = Sort.by(
-                Sort.Order.desc("noticeFixYn"),
                 Sort.Order.desc("createDate")
         );
 
