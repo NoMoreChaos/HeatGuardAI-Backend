@@ -1,0 +1,34 @@
+version: 0.2
+
+env:
+  variables:
+    GITOPS_REPO: "github.com/NoMoreChaos/ArgoCD-backend.git"
+    GITOPS_PATH: "."
+    IMAGE_REPO: "763843534515.dkr.ecr.ap-northeast-2.amazonaws.com"
+    IMAGE_NAME: "simple-docker-service-0a437ef9805b"
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $IMAGE_REPO
+
+  build:
+    commands:
+      - echo Build Docker image...
+      - TAG=$(date +%s)
+      - echo "TAG=$TAG"
+      - docker build -t $IMAGE_REPO/$IMAGE_NAME:$TAG .
+      - docker push $IMAGE_REPO/$IMAGE_NAME:$TAG
+
+  post_build:
+    commands:
+      - echo Update GitOps repo...
+      - git clone https://$GITHUB_TOKEN@$GITOPS_REPO gitops
+      - cd gitops/$GITOPS_PATH
+      - sed -i "s|image:.*|image: $IMAGE_REPO/$IMAGE_NAME:$TAG|" deployment.yaml
+      - git config --global user.email "sj77007983@naver.com"
+      - git config --global user.name "CiSJiK"
+      - git add .
+      - git commit -m "Update image tag to $TAG"
+      - git push https://$GITHUB_TOKEN@$GITOPS_REPO
