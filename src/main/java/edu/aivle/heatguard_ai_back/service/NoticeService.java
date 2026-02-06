@@ -200,14 +200,4 @@ public class NoticeService {
         // 3) 게시글 DB 삭제
         noticeRepository.delete(notice);
     }
-
-    private String buildKey(NoticeFileEntity f) {
-        String path = f.getNoticeFileSavePath();
-        String name = f.getNoticeFileSaveNm();
-        if (path == null || path.isBlank() || name == null || name.isBlank()) {
-            // 여기 값이 URL로 들어가 있으면 구조가 깨진 상태라, 저장로직부터 고쳐야 함
-            throw new IllegalStateException("S3 key 생성에 필요한 저장경로/저장파일명이 비어있습니다.");
-        }
-        return path + "/" + name;
-    }
 }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.*;
@@ -22,8 +21,6 @@ public class NoticeFileService {
     private final NoticeFileRepository noticeFileRepository;
     private final S3NoticeFileService s3NoticeFileService;
 
-    @Value("${app.s3.base-prefix:notice}")
-    private String basePrefix;
 
     @Value("${app.notice-file.max-size-bytes:10485760}")
     private long maxSizeBytes;
