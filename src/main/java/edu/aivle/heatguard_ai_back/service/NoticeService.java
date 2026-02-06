@@ -185,9 +185,14 @@ public class NoticeService {
 
         // 1) S3 삭제
         for (NoticeFileEntity f : files) {
-            String key = buildKey(f); // save_path + "/" + save_nm
+            String saveNm = f.getNoticeFileSaveNm();
+            if (saveNm == null || saveNm.isBlank()) {
+                throw new IllegalStateException("S3 삭제를 위한 저장파일명이 비어있습니다.");
+            }
+            String key = "notice/" + saveNm;
             s3NoticeFileService.delete(key);
         }
+
 
         // 2) 파일 DB 삭제
         noticeFileRepository.deleteAllByNoticeCd(noticeCd);
