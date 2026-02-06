@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.*;
@@ -22,8 +21,6 @@ public class NoticeFileService {
     private final NoticeFileRepository noticeFileRepository;
     private final S3NoticeFileService s3NoticeFileService;
 
-    @Value("${app.s3.base-prefix:notice}")
-    private String basePrefix;
 
     @Value("${app.notice-file.max-size-bytes:10485760}")
     private long maxSizeBytes;
@@ -43,8 +40,9 @@ public class NoticeFileService {
         try {
             String originalName = safeOriginalName(file.getOriginalFilename());
             String saveNm = uuidFileNameKeepExt(originalName); // UUID + 확장자
-            String savePath = buildSavePath();                 // 예: notice/2026/02
-            String key = savePath + "/" + saveNm;              // ✅ S3 KEY (URL 아님)
+
+            // ✅ S3 KEY (하드코딩)
+            String key = "notice/" + saveNm;
 
             String contentType = (file.getContentType() != null)
                     ? file.getContentType()
@@ -53,23 +51,24 @@ public class NoticeFileService {
             // 1) S3 업로드
             s3NoticeFileService.upload(file.getBytes(), key, contentType);
 
-            // 2) DB 저장 (중요: SAVE_PATH에는 URL 금지. prefix만 저장)
+            // 2) DB 저장 (CloudFront 전체 URL 저장)
             NoticeFileEntity e = new NoticeFileEntity();
             e.setNoticeFileNm(originalName);
             e.setNoticeFileSaveNm(saveNm);
-            e.setNoticeFileSavePath(savePath);
-            e.setNoticeFileType(contentType);     // 너 DB에 MIME 들어가길래 그대로
+            e.setNoticeFileSavePath(
+                    "https://d1khwqzyd1jbld.cloudfront.net/notice/" + saveNm
+            );
+            e.setNoticeFileType(contentType);
             e.setNoticeFileSize(file.getSize());
-            // e.setNoticeCd(null);
 
             NoticeFileEntity saved = noticeFileRepository.save(e);
-
             return new NoticeFileUploadResponse(saved.getNoticeFileCd());
 
         } catch (Exception ex) {
             throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "파일 업로드 실패");
         }
     }
+
 
     // ---------------- helper ----------------
 
@@ -109,10 +108,5 @@ public class NoticeFileService {
         int idx = originalFileName.lastIndexOf('.');
         if (idx == -1 || idx == originalFileName.length() - 1) return null;
         return originalFileName.substring(idx + 1).toLowerCase();
-    }
-
-    private String buildSavePath() {
-        LocalDate now = LocalDate.now();
-        return basePrefix ; //notice 폴더에 저장됨
     }
 }
