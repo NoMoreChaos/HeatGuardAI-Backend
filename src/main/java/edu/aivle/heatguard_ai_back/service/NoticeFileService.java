@@ -41,7 +41,7 @@ public class NoticeFileService {
             String originalName = safeOriginalName(file.getOriginalFilename());
             String saveNm = uuidFileNameKeepExt(originalName); // UUID + 확장자
 
-            // ✅ S3 KEY (하드코딩)
+            // S3 KEY
             String key = "notice/" + saveNm;
 
             String contentType = (file.getContentType() != null)

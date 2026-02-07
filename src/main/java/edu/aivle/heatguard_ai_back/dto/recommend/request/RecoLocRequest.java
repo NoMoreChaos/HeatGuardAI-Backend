@@ -11,7 +11,7 @@ import lombok.*;
 public class RecoLocRequest {
 
     @JsonProperty("target_count")
-    private Integer targetCount; // 1~5
+    private Integer targetCount; // 1~7
 
     @JsonProperty("target_region_gu")
     private String targetRegionGu; // null 가능
@@ -20,5 +20,5 @@ public class RecoLocRequest {
     private String targetRegionDong; // null 가능
 
     @JsonProperty("reco_loc_type_cd")
-    private Integer recoLocTypeCd; // 1~3
+    private Integer recoLocTypeCd; // 0~2
 }
