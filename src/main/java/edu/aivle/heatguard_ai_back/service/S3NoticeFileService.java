@@ -14,7 +14,7 @@ public class S3NoticeFileService {
 
     private final S3Client s3Client;
 
-    @Value("${app.s3.bucket}")
+    @Value("${S3_BUCKET}")
     private String bucket;
 
     // 업로드

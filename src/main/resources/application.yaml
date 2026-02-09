@@ -1,8 +1,5 @@
 spring:
   #snake_case로 api 컬럼값 출력되도록 설정
-  server:
-    port: 80
-    
   jackson:
     property-naming-strategy: SNAKE_CASE  #snake_case로 api 컬럼값 출력되도록 설정
   application:
@@ -34,7 +31,7 @@ app:
     max-size-bytes: 10485760   # 10MB
     allowed-ext: pdf,png,jpg,jpeg
   s3:
-    bucket: "heatguard-s3-bucket"
+    bucket: "hgaiback-s3"
     region: "ap-northeast-2"
     base-prefix: "notice"          # S3 key 최상위 폴더명
     presign-expire-minutes: 10      # S3 URL 유효시간 10분

@@ -3,7 +3,7 @@ FROM azul/zulu-openjdk:25-latest AS builder
 WORKDIR /app
 
 COPY . .
-RUN ./gradlew clean build -x test
+RUN ./gradlew clean build -x test || apt update && apt install -y gradle && gradle clean build -x test
 
 # 2단계: 실행 스테이지
 FROM eclipse-temurin:25-jre
