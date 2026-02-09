@@ -30,19 +30,19 @@ public class RecoLocEntity {
     @Column(name = "RECO_LOC_POPU_LEVEL", length = 10)
     private String recoLocPopuLevel; // 적음/보통/많음
 
-    @Column(name = "RECO_LOC_VULNERABLE_SCORE")
-    private Integer recoLocVulnerableScore; // 0~100
+    @Column(name = "RECO_LOC_VULNERABLE_LEVEL", length = 10)
+    private String recoLocVulnerableLevel; // 낮음/보통/높음
 
     @Column(name = "RECO_LOC_FEEL_TEMP", precision = 4, scale = 1)
     private java.math.BigDecimal recoLocFeelTemp;
 
-    @Column(name = "RECO_LOC_LST_SCORE", precision = 4, scale = 1)
-    private java.math.BigDecimal recoLocLstScore;
+    @Column(name = "RECO_LOC_LST_LEVEL", length = 10)
+    private String recoLocLstLevel;// 낮음/보통/높음
 
-    @Column(name = "RECO_LOC_NDIVI_SCORE")
-    private Integer recoLocNdiviScore; // (DB 컬럼명이 NDIVI라서 그대로 매핑)
+    @Column(name = "RECO_LOC_NDIVI_LEVEL", length = 10)
+    private String recoLocNdiviLevel; // 낮음/보통/높음
 
     @Lob
     @Column(name = "RECO_LOC_DESC")
-    private String recoLocDesc; // TEXT (DB) - API에서는 List<String>로 변환
+    private String recoLocDesc; // DB에서는 TEXT - API에서는 List<String>로 변환
 }
