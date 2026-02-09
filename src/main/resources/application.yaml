@@ -11,9 +11,9 @@ spring:
     name: heatguard-ai-back
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/{personal.db-name}
-    username: {personal.db-id}
-    password: {personal.db-pw}
+    url: ${DB_NAME}
+    username: ${DB_ID}
+    password: ${DB_PW}
 
   jpa:
     hibernate:
@@ -35,5 +35,3 @@ spring:
       max-size-bytes: 10485760   # 10MB
       allowed-ext: pdf,png,jpg,jpeg,hwp,doc,docx,xls,xlsx,ppt,pptx,txt
 
-  config:
-    import: classpath:personal.yaml
