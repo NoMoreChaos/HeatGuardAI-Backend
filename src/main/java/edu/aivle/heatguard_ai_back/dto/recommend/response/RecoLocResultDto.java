@@ -28,17 +28,17 @@ public class RecoLocResultDto {
     @JsonProperty("reco_loc_popu_level")
     private String recoLocPopuLevel; // 유동인구 수준
 
-    @JsonProperty("reco_loc_vulnerable_score")
-    private Integer recoLocVulnerableScore; // 취약계층 점수
+    @JsonProperty("reco_loc_vulnerable_level")
+    private String recoLocVulnerableLevel; // 취약계층 점수수준
 
     @JsonProperty("reco_loc_feel_temp")
     private BigDecimal recoLocFeelTemp; // 체감온도
 
-    @JsonProperty("reco_loc_lst_score")
-    private BigDecimal recoLocLstScore; // 지표면온도 점수
+    @JsonProperty("reco_loc_lst_level")
+    private String recoLocLstLevel; // 지표면온도 점수수준
 
-    @JsonProperty("reco_loc_ndvi_score")
-    private Integer recoLocNdviScore; // 식생지수 점수
+    @JsonProperty("reco_loc_ndvi_level")
+    private String recoLocNdviLevel; // 식생지수 점수수준
 
     @JsonProperty("reco_loc_total_score")
     private Integer recoLocTotalScore; // 종합점수

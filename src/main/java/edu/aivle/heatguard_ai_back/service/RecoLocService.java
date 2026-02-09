@@ -60,10 +60,10 @@ public class RecoLocService {
                         // RECO_LOC_TB
                         .recoLocRank(e.getRecoLocRank())
                         .recoLocPopuLevel(e.getRecoLocPopuLevel())
-                        .recoLocVulnerableScore(e.getRecoLocVulnerableScore())
+                        .recoLocVulnerableLevel(e.getRecoLocVulnerableLevel())
                         .recoLocFeelTemp(e.getRecoLocFeelTemp())
-                        .recoLocLstScore(e.getRecoLocLstScore())
-                        .recoLocNdviScore(e.getRecoLocNdiviScore())
+                        .recoLocLstLevel(e.getRecoLocLstLevel())
+                        .recoLocNdviLevel(e.getRecoLocNdiviLevel())
                         .recoLocTotalScore(e.getRecoLocTotalScore())
                         .recoLocDesc(toDescList(e.getRecoLocDesc()))
                         .build())
