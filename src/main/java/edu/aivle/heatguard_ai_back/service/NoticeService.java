@@ -21,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.util.List;
 
@@ -30,11 +32,12 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final NoticeFileRepository noticeFileRepository;
     private final UserRepository userRepository;
+    private final S3NoticeFileService s3NoticeFileService;
 
     /**
      * 1.[GET] 게시판 전체 리스트
-     * @pathvariable  noticeType 게시글 유형(null:전체)
-     * @pathvariable  limitCount 최신 게시글 개수(null:전체)
+     * noticeType 게시글 유형(null:전체)
+     * limitCount 최신 게시글 개수(null:전체)
      */
 
     public NoticeListResponse getNoticeList(String noticeType, Integer limitCount){
@@ -51,7 +54,6 @@ public class NoticeService {
 
         //1-2.정렬 : 고정 + 최신순
         Sort sort = Sort.by(
-                Sort.Order.desc("noticeFixYn"),
                 Sort.Order.desc("createDate")
         );
 
@@ -90,7 +92,7 @@ public class NoticeService {
     }
     /**
      * 2.[GET] 게시판 상세 조회
-     * @pathvariable noticeCd
+     * noticeCd
      */
     public NoticeDetailResponse getNoticeDetail(Integer noticeCd){
         NoticeEntity notice = noticeRepository.findById(noticeCd)
@@ -164,5 +166,37 @@ public class NoticeService {
 
         return new NoticeCreateResponse(noticeCd);
     }
-}
+    /**
+     * [DELETE] /api/notice/{notice_cd}
+     * - 게시글 삭제 + 연결된 파일들 S3 삭제 + 파일 DB 삭제
+     * (추천 순서)
+     * 1) S3 파일 삭제
+     * 2) FILE DB 삭제
+     * 3) NOTICE DB 삭제
+     */
+    @Transactional
+    public void deleteNotice(int noticeCd) {
 
+        NoticeEntity notice = noticeRepository.findById(noticeCd)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "게시글이 존재하지 않습니다."));
+
+        List<NoticeFileEntity> files = noticeFileRepository.findAllByNoticeCd(noticeCd);
+
+        // 1) S3 삭제
+        for (NoticeFileEntity f : files) {
+            String saveNm = f.getNoticeFileSaveNm();
+            if (saveNm == null || saveNm.isBlank()) {
+                throw new IllegalStateException("S3 삭제를 위한 저장파일명이 비어있습니다.");
+            }
+            String key = "notice/" + saveNm;
+            s3NoticeFileService.delete(key);
+        }
+
+
+        // 2) 파일 DB 삭제
+        noticeFileRepository.deleteAllByNoticeCd(noticeCd);
+
+        // 3) 게시글 DB 삭제
+        noticeRepository.delete(notice);
+    }
+}
