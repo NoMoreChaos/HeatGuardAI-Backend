@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -25,10 +27,10 @@ public class RecoLocService {
         Integer targetCount = request.getTargetCount();
         Integer typeCd = request.getRecoLocTypeCd();
 
-        if (targetCount == null || targetCount < 1 || targetCount > 5) {
-            throw new IllegalArgumentException("target_count는 1~5만 가능합니다.");
+        if (targetCount == null || targetCount < 1 || targetCount > 7) {
+            throw new IllegalArgumentException("target_count는 1~7만 가능합니다.");
         }
-        if (typeCd == null || typeCd < 1 || typeCd > 3) {
+        if (typeCd == null || typeCd < 0 || typeCd > 2) {
             throw new IllegalArgumentException("reco_loc_type_cd는 1~3만 가능합니다.");
         }
 
@@ -50,12 +52,20 @@ public class RecoLocService {
         // 3) 응답 구성
         List<RecoLocResultDto> results = entities.stream()
                 .map(e -> RecoLocResultDto.builder()
+                        // GEE_LOC_TB
                         .lat(e.getGeeLoc().getGeeLocLat())
                         .lng(e.getGeeLoc().getGeeLocLng())
+                        .geeAddressFull(e.getGeeLoc().getGeeAddressFull())
+
+                        // RECO_LOC_TB
                         .recoLocRank(e.getRecoLocRank())
-                        .geeLocAddress(e.getGeeLoc().getGeeAddressFull())
-                        .recoLocRisk(e.getRecoLocRisk())
-                        .recoLocDesc(e.getRecoLocDesc())
+                        .recoLocPopuLevel(e.getRecoLocPopuLevel())
+                        .recoLocVulnerableScore(e.getRecoLocVulnerableScore())
+                        .recoLocFeelTemp(e.getRecoLocFeelTemp())
+                        .recoLocLstScore(e.getRecoLocLstScore())
+                        .recoLocNdviScore(e.getRecoLocNdiviScore())
+                        .recoLocTotalScore(e.getRecoLocTotalScore())
+                        .recoLocDesc(toDescList(e.getRecoLocDesc()))
                         .build())
                 .toList();
 
@@ -68,6 +78,21 @@ public class RecoLocService {
                 .build();
     }
 
+    /**
+     * RECO_LOC_DESC(TEXT)를 API의 List<String> 형태로 변환
+     */
+    private List<String> toDescList(String descText) {
+        if (descText == null) return Collections.emptyList();
+
+        String trimmed = descText.trim();
+        if (trimmed.isEmpty()) return Collections.emptyList();
+
+        return Arrays.stream(trimmed.split("\\r?\\n"))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+    }
+
     private String normalize(String s) {
         if (s == null) return null;
         String trimmed = s.trim();
@@ -75,7 +100,6 @@ public class RecoLocService {
     }
 
     private String buildResultAddress(String gu, String dong) {
-        // 요구사항 그대로:
         // - gu/dong null => "서울시 전체"
         // - dong null => "서울시 {gu}"
         // - 둘다 있으면 => "서울시 {gu} {dong}"

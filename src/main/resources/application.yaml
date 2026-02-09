@@ -1,15 +1,10 @@
-# TODO:: 삭제 (임시)
-jwt:
-  secret: "8OieD8qFft9YPJ83x2B7bQqihu5NSqanEZZA6+ZH74UrvyIgVCgbbJJo/i9bzruz/gT7VqAU+xCa+UIhFuWlyQ=="
-
 spring:
   #snake_case로 api 컬럼값 출력되도록 설정
   server:
     port: 80
     
   jackson:
-    property-naming-strategy: SNAKE_CASE
-
+    property-naming-strategy: SNAKE_CASE  #snake_case로 api 컬럼값 출력되도록 설정
   application:
     name: heatguard-ai-back
   datasource:
@@ -29,12 +24,18 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
-  #jwt:
-  # secret: ${JWT_SECRET_KEY} # 추후 배포 서버에 저장하고 사용
-  #게시판 업로드 파일 경로 설정
-  app:
-    notice-file:
-      upload-dir: ./uploads/notice #s3와 연결되면 무시됨(삭제 안해도 오류 안 남)
-      max-size-bytes: 10485760   # 10MB
-      allowed-ext: pdf,png,jpg,jpeg,hwp,doc,docx,xls,xlsx,ppt,pptx,txt
+  config:
+    import: optional:classpath:personal.yaml, optional:classpath:aws-secret.yaml
 
+app:
+  base-url: "http://localhost:8080" # TODO(배포) : 추후 백엔드 서버 배포 후 실제 도메인으로 수정 필요
+  notice-file:
+    upload-dir: ./uploads/notice #s3와 연결되면 무시됨(삭제 안해도 오류 안 남)
+    max-size-bytes: 10485760   # 10MB
+    allowed-ext: pdf,png,jpg,jpeg
+  s3:
+    bucket: "heatguard-s3-bucket"
+    region: "ap-northeast-2"
+    base-prefix: "notice"          # S3 key 최상위 폴더명
+    presign-expire-minutes: 10      # S3 URL 유효시간 10분
+ 
