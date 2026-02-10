@@ -28,6 +28,9 @@ public class NoticeFileService {
     @Value("${app.notice-file.allowed-ext:pdf,png,jpg,jpeg,hwp,doc,docx,xls,xlsx,ppt,pptx,txt}")
     private String allowedExtCsv;
 
+    @Value("${S3_PATH}")
+    private String s3Path;
+
     /**
      * [POST] /api/notice/file/upload
      * - 파일 1개 업로드
@@ -56,7 +59,7 @@ public class NoticeFileService {
             e.setNoticeFileNm(originalName);
             e.setNoticeFileSaveNm(saveNm);
             e.setNoticeFileSavePath(
-                    "https://d3evjaauldo4w5.cloudfront.net/notice/" + saveNm
+                    s3Path + saveNm
             );
             e.setNoticeFileType(contentType);
             e.setNoticeFileSize(file.getSize());
