@@ -56,7 +56,7 @@ public class NoticeFileService {
             e.setNoticeFileNm(originalName);
             e.setNoticeFileSaveNm(saveNm);
             e.setNoticeFileSavePath(
-                    "https://d1khwqzyd1jbld.cloudfront.net/notice/" + saveNm
+                    "https://d3evjaauldo4w5.cloudfront.net/notice/" + saveNm
             );
             e.setNoticeFileType(contentType);
             e.setNoticeFileSize(file.getSize());
