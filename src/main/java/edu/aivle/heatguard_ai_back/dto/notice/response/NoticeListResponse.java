@@ -36,6 +36,9 @@ public class NoticeListResponse {
         private boolean noticeFixYn;
         //2-5)게시글 등록날짜
         private LocalDateTime createDate;
+
+        //2-6)게시글 등록 쿨링포그위치명
+        private String cfLocation;
     }
 
 }

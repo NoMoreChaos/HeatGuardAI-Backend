@@ -20,6 +20,9 @@ public class NoticeDetailResponse {
     private LocalDateTime createDate;
     private String noticeContent;
 
+    // 게시글 등록 쿨링포그위치명
+    private String cfLocation;
+
     private NoticeFile noticeFile;
 
     @Getter

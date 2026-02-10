@@ -25,6 +25,8 @@ import org.springframework.web.server.ResponseStatusException;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -78,6 +80,31 @@ public class NoticeService {
             }
         }
 
+
+        // noticeCd 목록
+        // noticeCd 목록을 이용해서 CF_LOCATION을 '배치 조회(IN 쿼리)'
+        // noticeCd를 모아서 한 번에 조회하는 방식
+        // 개별 조회(N+1 쿼리) 방지하기 위한 처리
+        List<Integer> noticeCds = entities.stream()
+                .map(NoticeEntity::getNoticeCd)
+                .toList();
+
+        // location 배치 조회 -> Map으로 변환
+        // NOTICE_TB와 CF_TB를 조인해서 (noticeCd, cfLocation) 조회
+        // noticeCd를 key로, cfLocation을 value로 하는 Map 생성
+        // DTO 변환 시 cfLocationMap.get(noticeCd) 참조
+        Map<Integer, String> cfLocationMap =
+                noticeCds.isEmpty()
+                        ? Map.of() // 공지 리스트가 0건일 때 DB 쿼리 생략
+                        : noticeRepository.findCfLocationsByNoticeCds(noticeCds).stream()
+                        .filter(r -> r.getNoticeCd() != null)
+                        .filter(r -> r.getCfLocation() != null) // value null 제거
+                        .collect(Collectors.toMap(
+                                NoticeRepository.NoticeCfLocationRow::getNoticeCd,
+                                NoticeRepository.NoticeCfLocationRow::getCfLocation,
+                                (a, b) -> a
+                        ));
+
         //1-4. Entity -> Dto 변환
         List<NoticeListResponse.Item> items = entities.stream()
                 .map(n -> new NoticeListResponse.Item(
@@ -85,7 +112,8 @@ public class NoticeService {
                         n.getNoticeTitle(),
                         n.getNoticeType(),
                         n.getNoticeFixYn(),
-                        n.getCreateDate()
+                        n.getCreateDate(),
+                        cfLocationMap.get(n.getNoticeCd())
                 ))
                 .toList();
         return new NoticeListResponse(items.size(),items);
@@ -107,6 +135,7 @@ public class NoticeService {
 
         NoticeDetailResponse.NoticeFile fileDto = null;
         NoticeFileEntity file = noticeRepository.findFileByNoticeCd(noticeCd).orElse(null);
+        String cfLocation = noticeRepository.findCfLocationByNoticeCd(noticeCd).orElse(null);
 
         if (file != null){
             fileDto = NoticeDetailResponse.NoticeFile.builder()
@@ -125,6 +154,7 @@ public class NoticeService {
                 .noticeType(notice.getNoticeType())
                 .createDate(notice.getCreateDate())
                 .noticeContent(notice.getNoticeContent())
+                .cfLocation(cfLocation)
                 .noticeFile(fileDto)
                 .build();
     }
