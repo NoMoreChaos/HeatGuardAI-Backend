@@ -7,13 +7,16 @@ import edu.aivle.heatguard_ai_back.entity.CoolingFogMeasureEntity;
 import edu.aivle.heatguard_ai_back.repository.CoolingFogMeasureRepository;
 import edu.aivle.heatguard_ai_back.repository.CoolingFogRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CoolingFogService {
@@ -50,11 +53,18 @@ public class CoolingFogService {
     public CoolingFogDetailResponse getCoolingFogDetail(String cf_cd) {
         CoolingFogEntity entity = coolingFogRepository.findById(cf_cd)
                 .orElseThrow(() -> new IllegalArgumentException("쿨링포그 상세 데이터가 없습니다."));
-        int nowHour = LocalTime.now().getHour();
+        int nowHour = LocalTime.now(ZoneId.of("Asia/Seoul")).getHour();
         String hourKey = resolveHourKey(nowHour);
+
+        log.info("CoolingFogDetail - nowHour={}, hourKey={}", nowHour, hourKey);
 
         // CF_MEASURE_TB에서 현재시간 이하 데이터 조회
         List<CoolingFogMeasureEntity> measures = coolingFogMeasureRepository.findMeasures(cf_cd, hourKey);
+
+        log.info("조회된 hour 목록 = {}",
+                measures.stream()
+                        .map(CoolingFogMeasureEntity::getCf_measure_hour)
+                        .toList());
 
         // time Map + 온습도
         Map<String, CoolingFogDetailResponse.TimeMeasure> timeMap = new LinkedHashMap<>();
