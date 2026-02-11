@@ -5,11 +5,15 @@ import edu.aivle.heatguard_ai_back.dto.coolingfog.response.CoolingFogDetailRespo
 import edu.aivle.heatguard_ai_back.dto.coolingfog.response.CoolingFogListResponse;
 import edu.aivle.heatguard_ai_back.service.CoolingFogService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/cf")
@@ -26,6 +30,8 @@ public class CoolingFogController {
     // 쿨링포그 상세
     @GetMapping("/{cf_cd}")
     public ApiResponse<CoolingFogDetailResponse> getCoolingFogDetail(@PathVariable("cf_cd") String cf_cd) {
+
+        log.info("쿨링포그 상세 Server time: {}", LocalDateTime.now());
         return ApiResponse.success(coolingFogService.getCoolingFogDetail(cf_cd));
     }
 }
