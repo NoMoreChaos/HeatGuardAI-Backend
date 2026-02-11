@@ -36,8 +36,8 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Integer> {
             value = """
                 select n.NOTICE_CD as noticeCd,
                     c.CF_LOCATION as cfLocation
-                from NOTICE_TB n
-                left join CF_TB c on n.CF_CD = c.CF_CD
+                from notice_tb n
+                left join cf_tb c on n.CF_CD = c.CF_CD
                 where n.NOTICE_CD in (:noticeCds)
             """
             , nativeQuery = true)
@@ -49,8 +49,8 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Integer> {
     @Query(
         value = """
             select c.CF_LOCATION
-            from NOTICE_TB n
-            left join CF_TB c on n.CF_CD = c.CF_CD
+            from notice_tb n
+            left join cf_tb c on n.CF_CD = c.CF_CD
             where n.NOTICE_CD = :noticeCd
         """
         , nativeQuery = true
