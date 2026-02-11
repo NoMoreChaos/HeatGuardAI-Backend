@@ -87,9 +87,18 @@ public class RecoLocService {
         String trimmed = descText.trim();
         if (trimmed.isEmpty()) return Collections.emptyList();
 
-        return Arrays.stream(trimmed.split("\\r?\\n"))
+        // 1) "['a', 'b', 'c']" 형태 바깥 대괄호 제거
+        if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+            // a', 'b', 'c
+            trimmed = trimmed.substring(1, trimmed.length() - 1).trim();
+        }
+
+        // 개행 또는 콤마(, / , ) 둘 다 분리
+        return Arrays.stream(trimmed.split("\\r?\\n|\\s*,\\s*"))
                 .map(String::trim)
-                .filter(s -> !s.isEmpty())
+                // 앞뒤 홑따옴표 제거
+                .map(s -> s.replaceAll("^'+|'+$", ""))
+                .filter(s -> !s.isBlank())
                 .toList();
     }
 
