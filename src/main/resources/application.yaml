@@ -1,7 +1,9 @@
+
 spring:
   #snake_case로 api 컬럼값 출력되도록 설정
   jackson:
     property-naming-strategy: SNAKE_CASE  #snake_case로 api 컬럼값 출력되도록 설정
+    time-zone: Asia/Seoul
   application:
     name: heatguard-ai-back
   datasource:
