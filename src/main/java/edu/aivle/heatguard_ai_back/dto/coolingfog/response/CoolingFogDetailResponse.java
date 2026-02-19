@@ -8,6 +8,7 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 public class CoolingFogDetailResponse {
+
     private String cf_city_gu;
     private String cf_city_dong;
     private String cf_location;

@@ -34,7 +34,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 
                 // CORS 활성화
-                .cors(cors -> {})
+                .cors(cors -> {
+                })
 
                 // 로그인 상태를 '세션'으로 기억X
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -90,8 +91,8 @@ public class SecurityConfig {
         config.setAllowedOriginPatterns(List.of(
                 "http://localhost:3000",
                 "http://127.0.0.1:3000",
-                "https://*.trycloudflare.com"
-                // TODO:: 화면 배포 주소
+                "https://*.trycloudflare.com",
+                "https://heat-guard-ai-frontend-one.vercel.app/" // 프론트엔드 배포용 주소
         ));
 
         // 메서드 허용

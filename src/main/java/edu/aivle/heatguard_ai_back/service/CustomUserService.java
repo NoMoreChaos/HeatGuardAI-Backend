@@ -3,8 +3,8 @@ package edu.aivle.heatguard_ai_back.service;
 import edu.aivle.heatguard_ai_back.entity.UserEntity;
 import edu.aivle.heatguard_ai_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 

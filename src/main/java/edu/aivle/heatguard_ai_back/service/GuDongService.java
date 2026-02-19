@@ -12,14 +12,14 @@ public class GuDongService {
     private final GuDongJsonLoader guDongJsonLoader;
 
     // 전체 구/동 맵 반환
-    public Map<String, List<String>> getAllDongGu(){
+    public Map<String, List<String>> getAllDongGu() {
 
         //구(key)를 오름차순으로 정렬
         Map<String, List<String>> sorted = new TreeMap<>();
 
         // 구+동 하나(onegu) 꺼내서 (구정렬 -> 동정렬) 반복
         for (Map.Entry<String, List<String>> onegu
-                : guDongJsonLoader.getGuDongMap().entrySet()){
+                : guDongJsonLoader.getGuDongMap().entrySet()) {
 
             //동 목록 복사 후 정렬
             List<String> dongs = new ArrayList<>(onegu.getValue());

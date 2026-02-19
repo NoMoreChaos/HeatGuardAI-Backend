@@ -6,9 +6,13 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter @Entity(name = "CF_TB")
+@Getter
+@Setter
+@Entity(name = "CF_TB")
 public class CoolingFogEntity {
-    @Id @Column(name = "CF_CD")
+
+    @Id
+    @Column(name = "CF_CD")
     private String cf_cd;
 
     @Column(name = "CF_CITY")

@@ -1,12 +1,11 @@
 package edu.aivle.heatguard_ai_back.dto.notice.response;
+
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
-import java.util.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Getter
@@ -14,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 
 public class NoticeListResponse {
+
     //1)전체 게시글 수
     private long totalCount;
 
@@ -25,7 +25,7 @@ public class NoticeListResponse {
     @NoArgsConstructor
     @AllArgsConstructor
 
-    public static class Item{
+    public static class Item {
         //2-1)게시글 코드
         private Integer noticeCd;
         //2-2)게시글 제목

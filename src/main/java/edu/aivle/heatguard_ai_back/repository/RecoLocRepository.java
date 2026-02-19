@@ -15,22 +15,22 @@ public interface RecoLocRepository extends JpaRepository<RecoLocEntity, RecoLocI
     // 서울시 전체 (gu/dong 없음)
     @EntityGraph(attributePaths = {"geeLoc"})
     @Query("""
-        select r
-        from RecoLocEntity r
-        where r.id.recoLocTypeCd = :typeCd
-        order by r.recoLocRank asc
-    """)
+                select r
+                from RecoLocEntity r
+                where r.id.recoLocTypeCd = :typeCd
+                order by r.recoLocRank asc
+            """)
     List<RecoLocEntity> findAllByType(@Param("typeCd") Integer typeCd, Pageable pageable);
 
     // 구까지만 선택
     @EntityGraph(attributePaths = {"geeLoc"})
     @Query("""
-        select r
-        from RecoLocEntity r
-        where r.id.recoLocTypeCd = :typeCd
-          and r.geeLoc.geeCityGu = :gu
-        order by r.recoLocRank asc
-    """)
+                select r
+                from RecoLocEntity r
+                where r.id.recoLocTypeCd = :typeCd
+                  and r.geeLoc.geeCityGu = :gu
+                order by r.recoLocRank asc
+            """)
     List<RecoLocEntity> findAllByTypeAndGu(@Param("typeCd") Integer typeCd,
                                            @Param("gu") String gu,
                                            Pageable pageable);
@@ -38,13 +38,13 @@ public interface RecoLocRepository extends JpaRepository<RecoLocEntity, RecoLocI
     // 구+동 선택
     @EntityGraph(attributePaths = {"geeLoc"})
     @Query("""
-        select r
-        from RecoLocEntity r
-        where r.id.recoLocTypeCd = :typeCd
-          and r.geeLoc.geeCityGu = :gu
-          and r.geeLoc.geeCityDong = :dong
-        order by r.recoLocRank asc
-    """)
+                select r
+                from RecoLocEntity r
+                where r.id.recoLocTypeCd = :typeCd
+                  and r.geeLoc.geeCityGu = :gu
+                  and r.geeLoc.geeCityDong = :dong
+                order by r.recoLocRank asc
+            """)
     List<RecoLocEntity> findAllByTypeAndGuAndDong(@Param("typeCd") Integer typeCd,
                                                   @Param("gu") String gu,
                                                   @Param("dong") String dong,

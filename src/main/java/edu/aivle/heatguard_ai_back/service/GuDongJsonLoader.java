@@ -2,13 +2,12 @@ package edu.aivle.heatguard_ai_back.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-
-import jakarta.annotation.PostConstruct;
 import java.io.InputStream;
 import java.util.*;
 
@@ -29,7 +28,8 @@ public class GuDongJsonLoader {
     public void load() {
         try (InputStream is = new ClassPathResource("gu_dong_legal.json").getInputStream()) {
             Map<String, List<String>> data =
-                    objectMapper.readValue(is, new TypeReference<Map<String, List<String>>>() {});
+                    objectMapper.readValue(is, new TypeReference<Map<String, List<String>>>() {
+                    });
             guDongMap = Collections.unmodifiableMap(data);
 
 //            log.info("구 개수 :{}", guDongMap.size());

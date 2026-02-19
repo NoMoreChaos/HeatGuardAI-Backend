@@ -8,6 +8,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class CoolingFogListResponse {
+
     private int totalCount;
     private List<CoolingFog> cfList;
 

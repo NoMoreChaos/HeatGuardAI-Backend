@@ -4,13 +4,13 @@ import edu.aivle.heatguard_ai_back.dto.ApiResponse;
 import edu.aivle.heatguard_ai_back.dto.notice.request.NoticeCreateRequest;
 import edu.aivle.heatguard_ai_back.dto.notice.response.NoticeCreateResponse;
 import edu.aivle.heatguard_ai_back.dto.notice.response.NoticeDetailResponse;
-import edu.aivle.heatguard_ai_back.service.NoticeService;
 import edu.aivle.heatguard_ai_back.dto.notice.response.NoticeListResponse;
+import edu.aivle.heatguard_ai_back.service.NoticeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -19,13 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 public class NoticeController {
 
     private final NoticeService noticeService;
+
     // 게시판 리스트
     @GetMapping
     public ApiResponse<NoticeListResponse> getNoticeList(
-            @RequestParam(name="notice_type",required = false) String noticeType,
-            @RequestParam(name="limit_count",required = false) Integer limitCount
-    ){
-        NoticeListResponse data = noticeService.getNoticeList(noticeType,limitCount);
+            @RequestParam(name = "notice_type", required = false) String noticeType,
+            @RequestParam(name = "limit_count", required = false) Integer limitCount
+    ) {
+        NoticeListResponse data = noticeService.getNoticeList(noticeType, limitCount);
         return ApiResponse.success(data);
     }
 
@@ -37,7 +38,6 @@ public class NoticeController {
         NoticeDetailResponse data = noticeService.getNoticeDetail(noticeCd);
         return ApiResponse.success(data);
     }
-
 
     // 게시판 생성(작성)
     @PostMapping("/create")

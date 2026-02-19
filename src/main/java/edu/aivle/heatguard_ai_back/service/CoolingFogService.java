@@ -26,9 +26,9 @@ public class CoolingFogService {
 
     // detail에서 시간별 리스트 노출 개수 위산 계산 메서드
     private String resolveHourKey(int nowHour) {
-        if(nowHour < 6) return "00";
-        if(nowHour < 12) return "06";
-        if(nowHour < 18) return "12";
+        if (nowHour < 6) return "00";
+        if (nowHour < 12) return "06";
+        if (nowHour < 18) return "12";
         return "18";
     }
 
@@ -87,7 +87,7 @@ public class CoolingFogService {
             hum = m.getCf_measure_hum_per();
         }
 
-        return new CoolingFogDetailResponse (
+        return new CoolingFogDetailResponse(
                 entity.getCf_city_gu(),
                 entity.getCf_city_dong(),
                 entity.getCf_location(),

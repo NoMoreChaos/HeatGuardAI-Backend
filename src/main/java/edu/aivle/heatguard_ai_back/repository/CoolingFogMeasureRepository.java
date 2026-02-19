@@ -10,12 +10,12 @@ import java.util.List;
 public interface CoolingFogMeasureRepository extends JpaRepository<CoolingFogMeasureEntity, String> {
 
     @Query("""
-        SELECT m
-        FROM CF_MEASURE_TB m
-        WHERE m.cf_cd = :cf_cd
-          AND m.cf_measure_hour <= :hour
-        ORDER BY m.cf_measure_hour ASC
-    """)
+                SELECT m
+                FROM CF_MEASURE_TB m
+                WHERE m.cf_cd = :cf_cd
+                  AND m.cf_measure_hour <= :hour
+                ORDER BY m.cf_measure_hour ASC
+            """)
     List<CoolingFogMeasureEntity> findMeasures(
             @Param("cf_cd") String cf_cd,
             @Param("hour") String hour
