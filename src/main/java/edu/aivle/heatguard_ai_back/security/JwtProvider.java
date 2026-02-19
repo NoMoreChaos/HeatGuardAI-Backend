@@ -57,13 +57,13 @@ public class JwtProvider {
         try {
             parseClaims(token); // 서명 + 만료 포함 검증
             return true;
-        }catch (JwtException | IllegalArgumentException e) {
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
 
     // 서명 검증 포함
-    public Claims parseClaims(String token){
+    public Claims parseClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()

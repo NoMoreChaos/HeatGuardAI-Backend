@@ -12,7 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @Service
 @RequiredArgsConstructor

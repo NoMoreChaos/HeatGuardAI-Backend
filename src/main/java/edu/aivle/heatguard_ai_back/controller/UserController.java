@@ -26,7 +26,6 @@ public class UserController {
         return ApiResponse.success(data);
     }
 
-
     // 회원가입 이메일 검증
     @GetMapping("/signup/emailCheck")
     public ApiResponse<Map<String, Object>> postEmailCheck(
@@ -35,7 +34,7 @@ public class UserController {
         try {
             userService.checkEmailAvailable(userId);
             return ApiResponse.success(Map.of());
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return ApiResponse.failure(e.getMessage());
         }
     }

@@ -18,6 +18,7 @@ public class RecoLocController {
 
     private final RecoLocService recoLocService;
 
+    // 쿨링포그 추천 위치 반환
     @PostMapping("/ai-loc")
     public ResponseEntity<ApiResponse<RecoLocResponse>> recommend(@RequestBody RecoLocRequest request) {
         try {

@@ -1,14 +1,15 @@
 package edu.aivle.heatguard_ai_back.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter @Setter @Entity
-@Table(name="NOTICE_TB")
+@Getter
+@Setter
+@Entity
+@Table(name = "NOTICE_TB")
 public class NoticeEntity {
 
     @Id
@@ -34,15 +35,15 @@ public class NoticeEntity {
     @Column(name = "NOTICE_FIX_YN", nullable = false)
     private Boolean noticeFixYn = false;
 
-    @Column(name = "CREATE_DATE",nullable = false, updatable = false)
+    @Column(name = "CREATE_DATE", nullable = false, updatable = false)
     private LocalDateTime createDate;
 
     @PrePersist
-    public void prePersist(){
-        if (this.createDate == null){
+    public void prePersist() {
+        if (this.createDate == null) {
             this.createDate = LocalDateTime.now();
         }
-        if (this.noticeFixYn == null){
+        if (this.noticeFixYn == null) {
             this.noticeFixYn = false;
         }
     }

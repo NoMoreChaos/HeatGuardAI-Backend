@@ -1,16 +1,14 @@
-
 spring:
-  #snake_case로 api 컬럼값 출력되도록 설정
   jackson:
-    property-naming-strategy: SNAKE_CASE  #snake_case로 api 컬럼값 출력되도록 설정
-    time-zone: Asia/Seoul
+    property-naming-strategy: SNAKE_CASE        # snake_case로 api 컬럼값 출력되도록 설정
+    time-zone: Asia/Seoul                       # 서버가 작동되는 시간대를 KST로 설정
   application:
     name: heatguard-ai-back
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: ${DB_NAME}
-    username: ${DB_ID}
-    password: ${DB_PW}
+    url: ${DB_NAME}                             # 데이터베이스 URL
+    username: ${DB_ID}                          # 데이터베이스 ID
+    password: ${DB_PW}                          # 데이터베이스 비밀번호
 
   jpa:
     hibernate:
@@ -27,14 +25,14 @@ spring:
     import: optional:classpath:personal.yaml, optional:classpath:aws-secret.yaml
 
 app:
-  base-url: "http://ec2-3-39-229-79.ap-northeast-2.compute.amazonaws.com:30080" # TODO(배포) : 추후 백엔드 서버 배포 후 실제 도메인으로 수정 필요
+  base-url: "https://heatguard.duckdns.org:30216/" # 서버 URL(HTTPS)
   notice-file:
-    upload-dir: ./uploads/notice #s3와 연결되면 무시됨(삭제 안해도 오류 안 남)
-    max-size-bytes: 10485760   # 10MB
-    allowed-ext: pdf,png,jpg,jpeg
+    upload-dir: ./uploads/notice    # S3와 연결되면 무시됨(삭제 안해도 오류 안 남)
+    max-size-bytes: 10485760        # 10MB
+    allowed-ext: pdf,png,jpg,jpeg   # 지정 확장자
   s3:
-    bucket: "hgaiback-s3"
+    bucket: "hgaiback-s3"           # 실제 S3 버킷 이름
     region: "ap-northeast-2"
-    base-prefix: "notice"          # S3 key 최상위 폴더명
+    base-prefix: "notice"           # S3 key 최상위 폴더명
     presign-expire-minutes: 10      # S3 URL 유효시간 10분
  

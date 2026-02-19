@@ -14,10 +14,12 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "USER_TB")
 public class UserEntity {
-    @Id @Column(name = "USER_CD")
+
+    @Id
+    @Column(name = "USER_CD")
     private String userCd;
 
-    @Column(name = "USER_ID", nullable = false, unique=true)
+    @Column(name = "USER_ID", nullable = false, unique = true)
     private String userId;
 
     @Column(name = "USER_PW", nullable = false)

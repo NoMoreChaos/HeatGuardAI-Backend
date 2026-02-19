@@ -22,15 +22,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class NoticeService {
+
     private final NoticeRepository noticeRepository;
     private final NoticeFileRepository noticeFileRepository;
     private final UserRepository userRepository;
@@ -42,15 +44,15 @@ public class NoticeService {
      * limitCount 최신 게시글 개수(null:전체)
      */
 
-    public NoticeListResponse getNoticeList(String noticeType, Integer limitCount){
+    public NoticeListResponse getNoticeList(String noticeType, Integer limitCount) {
         //1-1. 파라미터 처리
         // notice_type
-        String type = (noticeType==null || noticeType.trim().isEmpty())
-                ?null
-                :noticeType.trim();
+        String type = (noticeType == null || noticeType.trim().isEmpty())
+                ? null
+                : noticeType.trim();
         // limit_count
         Integer limit = limitCount;
-        if (limit != null && limit <= 0){
+        if (limit != null && limit <= 0) {
             throw new IllegalArgumentException("limit_count는 1이상이어야 합니다.");
         }
 
@@ -62,21 +64,21 @@ public class NoticeService {
         //1-3. 조회
         List<NoticeEntity> entities;
         //limitCount 있으면 최신 상위 limitCount개만 출력
-        if (limit != null){
-            PageRequest pr = PageRequest.of(0,limit,sort);
+        if (limit != null) {
+            PageRequest pr = PageRequest.of(0, limit, sort);
 
             if (type == null) {
                 entities = noticeRepository.findAll(pr).getContent();
-            }else{
+            } else {
                 entities = noticeRepository.findByNoticeType(type, pr).getContent();
             }
         }
         //limitCount 없으면 개수 상관없이 전체 조회
-        else{
-            if (type == null){
+        else {
+            if (type == null) {
                 entities = noticeRepository.findAll(sort);
-            }else {
-                entities = noticeRepository.findByNoticeType(type,sort);
+            } else {
+                entities = noticeRepository.findByNoticeType(type, sort);
             }
         }
 
@@ -116,28 +118,29 @@ public class NoticeService {
                         cfLocationMap.get(n.getNoticeCd())
                 ))
                 .toList();
-        return new NoticeListResponse(items.size(),items);
+        return new NoticeListResponse(items.size(), items);
     }
+
     /**
      * 2.[GET] 게시판 상세 조회
      * noticeCd
      */
-    public NoticeDetailResponse getNoticeDetail(Integer noticeCd){
+    public NoticeDetailResponse getNoticeDetail(Integer noticeCd) {
         NoticeEntity notice = noticeRepository.findById(noticeCd)
-                .orElseThrow(()->
-                        new IllegalArgumentException(noticeCd+"존재하지 않는 게시글입니다.")
+                .orElseThrow(() ->
+                        new IllegalArgumentException(noticeCd + "존재하지 않는 게시글입니다.")
                 );
         //userNm : USER_TB에서 조회
         String userNm = userRepository.findUserNmByUserCd(notice.getUserCd());
         //userNm 없거나 NULL인 경우
-        if (userNm == null) userNm ="";
+        if (userNm == null) userNm = "";
 
 
         NoticeDetailResponse.NoticeFile fileDto = null;
         NoticeFileEntity file = noticeRepository.findFileByNoticeCd(noticeCd).orElse(null);
         String cfLocation = noticeRepository.findCfLocationByNoticeCd(noticeCd).orElse(null);
 
-        if (file != null){
+        if (file != null) {
             fileDto = NoticeDetailResponse.NoticeFile.builder()
                     .noticeFileCd(file.getNoticeFileCd())
                     .noticeFileNm(file.getNoticeFileNm())
@@ -158,6 +161,7 @@ public class NoticeService {
                 .noticeFile(fileDto)
                 .build();
     }
+
     /**
      * 3.[POST] 게시판 생성
      */
@@ -166,7 +170,7 @@ public class NoticeService {
 
         // 1) Notice 저장 (PK 생성)
         NoticeEntity notice = new NoticeEntity();
-        if (req.getCfCd() != null){
+        if (req.getCfCd() != null) {
             notice.setCfCd(req.getCfCd());
         }
         notice.setUserCd(req.getUserCd());
@@ -196,6 +200,7 @@ public class NoticeService {
 
         return new NoticeCreateResponse(noticeCd);
     }
+
     /**
      * [DELETE] /api/notice/{notice_cd}
      * - 게시글 삭제 + 연결된 파일들 S3 삭제 + 파일 DB 삭제

@@ -19,6 +19,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
@@ -31,25 +32,25 @@ public class UserService {
         );
 
         UserEntity user = userRepository.findByUserId(authentication.getName())
-                .orElseThrow(() ->  new IllegalArgumentException("아이디 또는 비밀번호가 틀렸습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 틀렸습니다."));
 
         return buildAuthResponse(user);
     }
 
 
     // 이메일 중복검증
-    public void checkEmailAvailable (String email) {
-        if(userRepository.existsByUserId(email)) {
+    public void checkEmailAvailable(String email) {
+        if (userRepository.existsByUserId(email)) {
             throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
         }
     }
 
     // 회원가입
-    public Map<String, Object> signUp(SignupRequest req){
+    public Map<String, Object> signUp(SignupRequest req) {
         String email = req.getUser_id();
 
         // 이메일 중복 체크 (검증 API가 있어도 최종 체크 필요)
-        if(userRepository.existsByUserId(email)) {
+        if (userRepository.existsByUserId(email)) {
             throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
         }
 
@@ -67,7 +68,7 @@ public class UserService {
         return buildAuthResponse(user);
     }
 
-    private Map<String, Object> buildAuthResponse(UserEntity user){
+    private Map<String, Object> buildAuthResponse(UserEntity user) {
         boolean isAdmin = user.isUserAuth();
         String token = jwtProvider.createAccessToken(user.getUserId(), isAdmin);
 

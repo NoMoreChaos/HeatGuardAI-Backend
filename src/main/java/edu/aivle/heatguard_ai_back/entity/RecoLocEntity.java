@@ -3,7 +3,8 @@ package edu.aivle.heatguard_ai_back.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -28,21 +29,21 @@ public class RecoLocEntity {
     private Integer recoLocTotalScore;
 
     @Column(name = "RECO_LOC_POPU_LEVEL", length = 10)
-    private String recoLocPopuLevel; // 적음/보통/많음
+    private String recoLocPopuLevel;        // 적음/보통/많음
 
     @Column(name = "RECO_LOC_VULNERABLE_LEVEL", length = 10)
-    private String recoLocVulnerableLevel; // 낮음/보통/높음
+    private String recoLocVulnerableLevel;  // 낮음/보통/높음
 
     @Column(name = "RECO_LOC_FEEL_TEMP", precision = 4, scale = 1)
     private java.math.BigDecimal recoLocFeelTemp;
 
     @Column(name = "RECO_LOC_LST_LEVEL", length = 10)
-    private String recoLocLstLevel;// 낮음/보통/높음
+    private String recoLocLstLevel;         // 낮음/보통/높음
 
     @Column(name = "RECO_LOC_NDIVI_LEVEL", length = 10)
-    private String recoLocNdiviLevel; // 낮음/보통/높음
+    private String recoLocNdiviLevel;       // 낮음/보통/높음
 
     @Lob
     @Column(name = "RECO_LOC_DESC")
-    private String recoLocDesc; // DB에서는 TEXT - API에서는 List<String>로 변환
+    private String recoLocDesc;             // DB에서는 TEXT - API에서는 List<String>로 변환
 }
